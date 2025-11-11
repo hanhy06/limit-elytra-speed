@@ -2,9 +2,7 @@
 	"required": true,
 	"package": "io.github.hanhy06.limitelytraspeed.mixin",
 	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"ExampleMixin"
-	],
+	"mixins": [],
 	"injectors": {
 		"defaultRequire": 1
 	},

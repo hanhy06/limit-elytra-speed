@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
@@ -44,7 +43,7 @@ public class LimitElytraSpeed implements ModInitializer {
         Vec3d currentVelocity = entity.getVelocity();
         double currentVelocitySquared = currentVelocity.lengthSquared();
 
-        if (currentVelocitySquared > limitPerTickSquared && entity instanceof ServerPlayerEntity player) {
+        if (currentVelocitySquared > limitPerTickSquared) {
             entity.setVelocity(currentVelocity.normalize().multiply(limitPerTick));
             entity.velocityModified = true;
         }

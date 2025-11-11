@@ -8,10 +8,9 @@
 		"hanhy06"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/hanhy06/limit-elytra-speed"
 	},
-	"license": "CC0-1.0",
+	"license": "Apache-2.0 license",
 	"icon": "assets/limit-elytra-speed/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -24,7 +23,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.17.3",
-		"minecraft": "~1.21.10",
+		"minecraft": ">=1.20",
 		"java": ">=21",
 		"fabric-api": "*"
 	},

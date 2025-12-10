@@ -21,23 +21,21 @@ public class LimitElytraSpeed implements ModInitializer {
     public static final GameRule<Integer> LIMIT_ELYTRA_SPEED = GameRuleBuilder
             .forInteger(70)
             .category(GameRuleCategory.PLAYER)
-            .buildAndRegister(Identifier.of(MOD_ID,"limit_elytra_speed"));
+            .buildAndRegister(Identifier.of("limit_elytra_speed"));
 
     public static double limitSpeed = 70;
 
 	@Override
 	public void onInitialize() {
-        GameRuleEvents.changeCallback(LIMIT_ELYTRA_SPEED).register((integer, server) -> {
-            limitSpeed = calculateSpeed(integer,server);
-        });
+        GameRuleEvents.changeCallback(LIMIT_ELYTRA_SPEED).register(LimitElytraSpeed::calculateSpeed);
         EntityElytraEvents.CUSTOM.register(LimitElytraSpeed::LimitSpeed);
 
 		LOGGER.info(MOD_ID + "Loaded");
 	}
 
-    private static double calculateSpeed(Integer limitSpeed, MinecraftServer server){
-        double limitPerTick = limitSpeed / 20.0;
-        return limitPerTick * limitPerTick;
+    private static void calculateSpeed(Integer integer, MinecraftServer server){
+        double limitPerTick = integer / 20.0;
+        limitSpeed = limitPerTick * limitPerTick;
     }
 
     public static boolean LimitSpeed(LivingEntity entity, boolean tickElytra){

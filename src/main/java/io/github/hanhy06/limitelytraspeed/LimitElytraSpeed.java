@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleBuilder;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleEvents;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -22,31 +23,19 @@ public class LimitElytraSpeed implements ModInitializer {
             .category(GameRuleCategory.PLAYER)
             .buildAndRegister(Identifier.of(MOD_ID,"limit_elytra_speed"));
 
-    private static int limitSpeed = 70;
+    public static double limitSpeed = 70;
 
 	@Override
 	public void onInitialize() {
-        EntityElytraEvents.CUSTOM.register(LimitElytraSpeed::LimitSpeed);
-        GameRuleEvents.changeCallback(LIMIT_ELYTRA_SPEED).register((integer, minecraftServer) -> limitSpeed = integer);
+        GameRuleEvents.changeCallback(LIMIT_ELYTRA_SPEED).register((integer, server) -> {
+            limitSpeed = limitSpeed(integer,server);
+        });
 
 		LOGGER.info(MOD_ID + "Loaded");
 	}
 
-    public static boolean LimitSpeed(LivingEntity entity, boolean tickElytra){
-        World world = entity.getEntityWorld();
-        if (world.isClient()) return tickElytra;
-
+    private static double limitSpeed(Integer limitSpeed, MinecraftServer server){
         double limitPerTick = limitSpeed / 20.0;
-        double limitPerTickSquared = limitPerTick * limitPerTick;
-
-        Vec3d currentVelocity = entity.getVelocity();
-        double currentVelocitySquared = currentVelocity.lengthSquared();
-
-        if (currentVelocitySquared > limitPerTickSquared) {
-            entity.setVelocity(currentVelocity.normalize().multiply(limitPerTick));
-            entity.velocityDirty = true;
-        }
-
-        return tickElytra;
+        return limitPerTick * limitPerTick;
     }
 }

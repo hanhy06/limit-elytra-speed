@@ -3,7 +3,7 @@
   "package": "io.github.hanhy06.limitelytraspeed.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ElytraPhysicsMixin"
+
   ],
   "injectors": {
     "defaultRequire": 1

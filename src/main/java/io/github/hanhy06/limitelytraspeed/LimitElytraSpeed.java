@@ -28,14 +28,30 @@ public class LimitElytraSpeed implements ModInitializer {
 	@Override
 	public void onInitialize() {
         GameRuleEvents.changeCallback(LIMIT_ELYTRA_SPEED).register((integer, server) -> {
-            limitSpeed = limitSpeed(integer,server);
+            limitSpeed = calculateSpeed(integer,server);
         });
+        EntityElytraEvents.CUSTOM.register(LimitElytraSpeed::LimitSpeed);
 
 		LOGGER.info(MOD_ID + "Loaded");
 	}
 
-    private static double limitSpeed(Integer limitSpeed, MinecraftServer server){
+    private static double calculateSpeed(Integer limitSpeed, MinecraftServer server){
         double limitPerTick = limitSpeed / 20.0;
         return limitPerTick * limitPerTick;
+    }
+
+    public static boolean LimitSpeed(LivingEntity entity, boolean tickElytra){
+        World world = entity.getEntityWorld();
+        if (world.isClient()) return tickElytra;
+
+        Vec3d currentVelocity = entity.getVelocity();
+        double currentVelocitySquared = currentVelocity.lengthSquared();
+
+        if (currentVelocitySquared > limitSpeed) {
+            entity.setVelocity(currentVelocity.normalize().multiply(limitSpeed));
+            entity.velocityDirty = true;
+        }
+
+        return tickElytra;
     }
 }
